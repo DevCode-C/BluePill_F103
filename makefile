@@ -2,10 +2,12 @@ CC = arm-none-eabi
 CORE = -mcpu=cortex-m3 -mthumb -mfloat-abi=soft
 TARGET = temp
 SYMBOLS = -DSTM32F103xB -DUSE_HAL_DRIVER
-SYMBOLS += -DSEMIHOSTING
+# SYMBOLS += -DSEMIHOSTING
 # MOdification
-VPATH = App/Source cmsis/startup HALF1/Src 
+VPATH = App/Source cmsis/startup HALF1/Src FreeRTOS/source FreeRTOS/portable
+
 INCLUDES = -I App/Include -I cmsis/core -I cmsis/registers -I HALF1/Inc
+INCLUDES += -I FreeRTOS/include
 
 F_SECTIONS = -ffunction-sections -fdata-sections
 SPECS_V = -Wl,--gc-sections --specs=rdimon.specs --specs=nano.specs
@@ -27,6 +29,8 @@ LNFLAGS += --cppcheck-build-dir=Build/cppcheck
 SRCS  = main.c App_ints.c App_msps.c startup_stm32f103xb.c system_stm32f1xx.c 
 SRCS += stm32f1xx_hal.c stm32f1xx_hal_cortex.c stm32f1xx_hal_rcc.c stm32f1xx_hal_flash.c
 SRCS += stm32f1xx_hal_gpio.c stm32f1xx_hal_uart.c stm32f1xx_hal_dma.c stm32f1xx_hal_rtc.c
+
+SRCS += tasks.c
 
 OBJS = $(SRCS:%.c=$(OBJS_F)/%.o)
 
