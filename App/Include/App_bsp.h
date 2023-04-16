@@ -6,4 +6,10 @@
 #include "stm32f103xb.h"
 #include "stm32f1xx_hal_conf.h"
 
+/**
+ * @brief New comment
+ * @date 11/04/2023
+ * @author Emmanuel Paredes Camargo
+*/
+
 #endif
