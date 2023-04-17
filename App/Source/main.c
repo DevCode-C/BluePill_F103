@@ -10,7 +10,12 @@
 extern void initialise_monitor_handles(void);
 #endif
 
-/* Declaration of functions for the tasks */
+/**
+ * @brief Interfaces usadas para pruebas
+ * 
+ * @author Emmanuel Paredes Camargo
+ * 
+*/
 static void vSetupHardware( void );
 static void vTask_10ms( void *p );
 static void vTask_50ms( void *p );
@@ -84,7 +89,7 @@ static void vSetupHardware( void )
     InitialStructure.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOC,&InitialStructure);
     /*Application initializations*/
-    // Os_SetupHardware();
+    /* Os_SetupHardware();*/
 }
 
 /**
@@ -196,7 +201,7 @@ static void vTask_500ms( void *p )
  */
 void vApplicationIdleHook(void) /* cppcheck-suppress misra-c2012-8.4 */
 {
-    // Os_IdleTask();
+    
 }
 
 
@@ -210,7 +215,7 @@ void vApplicationIdleHook(void) /* cppcheck-suppress misra-c2012-8.4 */
  */
 void vApplicationTickHook(void)
 {
-    // Os_TickHook();
+    
 }
 
 
@@ -230,7 +235,6 @@ void vApplicationTickHook(void)
  */
 void assert_failed( const char *file, int line )
 {
-    // (void)printf( "Suspected error on file: %s, line %d\r\n", file, line );
     while( 1 )
     {
     }
@@ -245,6 +249,5 @@ void assert_failed( const char *file, int line )
  */
 void HardFault_Handler( void ) /* cppcheck-suppress misra-c2012-8.4 */
 {
-    // assert_macro( 0u );
     HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
 }
