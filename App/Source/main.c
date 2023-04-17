@@ -70,6 +70,10 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, StackTy
     *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE; /* cppcheck-suppress misra-c2012-10.6*/
 }
 
+/**
+ * @brief Function definition for hardware initialization. Setting Clock and GPIO ports
+ * 
+ */
 static void vSetupHardware( void )
 {
     /* initialize semihosting */
