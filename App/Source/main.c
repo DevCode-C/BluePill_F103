@@ -36,8 +36,10 @@ int main(void)
     static StackType_t Task100ms_Stack[ configMINIMAL_STACK_SIZE ];
     static StackType_t Task500ms_Stack[ configMINIMAL_STACK_SIZE ];
 
+    /* Initialize the hardware */ 
     vSetupHardware();
 
+    /* Creation of the four tasks */
     (void)xTaskCreateStatic( vTask_10ms, "10msTask", configMINIMAL_STACK_SIZE, NULL, 4u, Task10ms_Stack, &Task10ms_Buffer );
     (void)xTaskCreateStatic( vTask_50ms, "50msTask", configMINIMAL_STACK_SIZE, NULL, 3u, Task50ms_Stack, &Task50ms_Buffer );
     (void)xTaskCreateStatic( vTask_100ms, "100msTask", configMINIMAL_STACK_SIZE, NULL, 2u, Task100ms_Stack, &Task100ms_Buffer );
