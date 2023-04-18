@@ -1,15 +1,26 @@
-#include "App_bsp.h"
-#include "stm32f1xx_hal_gpio.h"
-#include "stm32f1xx_hal_rcc.h"
+/******************************************************
+ * BLUEPILL_F103 PROJECT
+ * ***************************************************/
 
-#include "FreeRTOS.h"
-#include "task.h"
+/******************************************************
+ * INCLUDES
+ * ***************************************************/
+#include <App_bsp.h>
+#include <stm32f1xx_hal_gpio.h>
+#include <stm32f1xx_hal_rcc.h>
+
+#include <FreeRTOS.h>
+#include <task.h>
 
 #if defined(SEMIHOSTING)
-#include "stdio.h"
+#include <stdio.h>
 extern void initialise_monitor_handles(void);
 #endif
 
+
+/******************************************************
+ * STATIC FUNCTIONS DECLARATIONS
+ * ***************************************************/
 /**
  * @brief Interfaces usadas para pruebas
  * 
@@ -22,6 +33,9 @@ static void vTask_50ms( void *p );
 static void vTask_100ms( void *p );
 static void vTask_500ms( void *p );
 
+/******************************************************
+ * GLOBAL FUNCTIONS DEFINITIONS
+ * ***************************************************/
 int main(void)
 {
 
@@ -50,6 +64,7 @@ int main(void)
     return 0u;
 }
 
+
 /**
  * @brief   **provide the memory that is used by the Idle task**
  *
@@ -72,6 +87,73 @@ void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer, StackTy
     *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE; /* cppcheck-suppress misra-c2012-10.6*/
 }
 
+
+/**
+ * @brief   **Idle task**
+ *
+ * The idle task runs at the very lowest priority, so such an idle hook function will only get 
+ * executed when there are no tasks of higher priority that are able to run
+ * 
+ * @retval  None
+ */
+void vApplicationIdleHook(void) /* cppcheck-suppress misra-c2012-8.4 */
+{
+    
+}
+
+
+/**
+ * @brief   **Idle Hook**
+ *
+ * The tick interrupt can optionally call an application defined hook (or callback) function - 
+ * the tick hook. The tick hook provides a convenient place to implement timer functionality
+ * 
+ * @retval  None
+ */
+void vApplicationTickHook(void)
+{
+    
+}
+
+
+/**
+ * @brief   **Print the file and line where the function was called**
+ *
+ * Use the function with to point it out where a potential error happend, the output will only be
+ * visible trough the debug server (OpenOCD) so it is mandatory to run the code inside a debug
+ * session. It is recomended to call this fucntion trhough the macro assert_macro
+ *
+ * @param file string with the name of the file where the function was called. macro __FILE__ shall
+ * be used
+ * @param line the line number of the file where the function was called, macro __LINE__ shall be
+ * used
+ *
+ * @retval none
+ */
+void assert_failed( const char *file, int line )
+{
+    while( 1 )
+    {
+    }
+}
+
+
+/**
+ * @brief   **Hard Fault interrupt vector**
+ *
+ * Any time an ilegal operation in the microcontroller is perform the program execution will jump
+ * inside this ISR, This function will only invoke the macro assert_macro to print out the file and
+ * line where the error was caused
+ */
+void HardFault_Handler( void ) /* cppcheck-suppress misra-c2012-8.4 */
+{
+    HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
+}
+
+
+/******************************************************
+ * STATIC FUNCTIONS DEFINITIONS
+ * ***************************************************/
 /**
  * @brief Function definition for hardware initialization. Setting Clock and GPIO ports
  * 
@@ -95,6 +177,7 @@ static void vSetupHardware( void )
     /*Application initializations*/
     /* Os_SetupHardware();*/
 }
+
 
 /**
  * @brief   **10 millisecond freertos task**
@@ -193,65 +276,4 @@ static void vTask_500ms( void *p )
         /*Block this task for exactly 500ms*/
         vTaskDelayUntil( &Seed, 500u );
     }
-}
-
-/**
- * @brief   **Idle task**
- *
- * The idle task runs at the very lowest priority, so such an idle hook function will only get 
- * executed when there are no tasks of higher priority that are able to run
- * 
- * @retval  None
- */
-void vApplicationIdleHook(void) /* cppcheck-suppress misra-c2012-8.4 */
-{
-    
-}
-
-
-/**
- * @brief   **Idle Hook**
- *
- * The tick interrupt can optionally call an application defined hook (or callback) function - 
- * the tick hook. The tick hook provides a convenient place to implement timer functionality
- * 
- * @retval  None
- */
-void vApplicationTickHook(void)
-{
-    
-}
-
-
-/**
- * @brief   **Print the file and line where the function was called**
- *
- * Use the function with to point it out where a potential error happend, the output will only be
- * visible trough the debug server (OpenOCD) so it is mandatory to run the code inside a debug
- * session. It is recomended to call this fucntion trhough the macro assert_macro
- *
- * @param file string with the name of the file where the function was called. macro __FILE__ shall
- * be used
- * @param line the line number of the file where the function was called, macro __LINE__ shall be
- * used
- *
- * @retval none
- */
-void assert_failed( const char *file, int line )
-{
-    while( 1 )
-    {
-    }
-}
-
-/**
- * @brief   **Hard Fault interrupt vector**
- *
- * Any time an ilegal operation in the microcontroller is perform the program execution will jump
- * inside this ISR, This function will only invoke the macro assert_macro to print out the file and
- * line where the error was caused
- */
-void HardFault_Handler( void ) /* cppcheck-suppress misra-c2012-8.4 */
-{
-    HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
 }
